@@ -1,0 +1,153 @@
+﻿@page "/employeeTable"
+
+@using EDMIMudblazorProject.Data
+
+
+@inject EmployeeServices service
+
+<MudTable Items="@Employees" Filter="new Func<Employee,bool>(FilterFunc1)">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">List of Employee</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Employee ID</MudTh>
+        <MudTh>First Name</MudTh>
+        <MudTh>Last Name</MudTh>
+        <MudTh>Email</MudTh>
+        <MudTh>Phone Number</MudTh>
+        <MudTh>Hire Date</MudTh>
+        <MudTh>Job Title</MudTh>
+        <MudTh>Salary</MudTh>
+        <MudTh>Department</MudTh>
+        <MudTh></MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Employee ID">@context.EmployeeId</MudTd>
+        <MudTd DataLabel="First Name">@context.FirstName</MudTd>
+        <MudTd DataLabel="Last Name">@context.LastName</MudTd>
+        <MudTd DataLabel="Email">@context.Email</MudTd>
+        <MudTd DataLabel="Phone Number">@context.PhoneNumber</MudTd>
+        <MudTd DataLabel="Hire Date">@Convert.ToDateTime(@context.HireDate).ToString("dd/MM/yyyy")</MudTd>
+        <MudTd DataLabel="Job Title">@context.JobTitle</MudTd>
+        <MudTd DataLabel="Salary">Php @context.Salary</MudTd>
+        <MudTd DataLabel="Department">@context.DepartmentName</MudTd>
+        <MudTd>
+            <MudButton Variant="Variant.Filled" Style="justify-content:flex-end!important;" @onclick="@(()=>DeleteEmployee(context))" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error"></MudButton>
+            <MudButton Variant="Variant.Filled" Style="justify-content:flex-end!important;" @onclick="@(()=>SetEmployeeForUpdate(context))" StartIcon="@Icons.Material.Filled.Edit" Color="Color.Primary"></MudButton>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+<br />
+
+<EditForm Model="@UpdateEmployee" OnValidSubmit="OnValidSubmit" style="justify-content: center;">
+    <DataAnnotationsValidator/>
+    <MudGrid style="justify-content: center!important;">
+        <MudItem xs="12" sm="7" lg="5">
+            <MudCard>
+            <MudCardContent>
+                <MudTextField Label="First name" HelperText="Max. 8 characters" Required
+                              @bind-Value="UpdateEmployee.FirstName" For="@(() => UpdateEmployee.FirstName)"/>
+                <MudTextField Label="Last name" HelperText="Max. 8 characters" Required
+                              @bind-Value="UpdateEmployee.LastName" For="@(() => UpdateEmployee.LastName)" />
+                <MudTextField Label="Email" Class="mt-3" Required
+                              @bind-Value="UpdateEmployee.Email" For="@(() => UpdateEmployee.Email)" />
+                <MudTextField Label="Phone Number" Class="mt-3" Required
+                              @bind-Value="UpdateEmployee.PhoneNumber" For="@(() => UpdateEmployee.PhoneNumber)" />
+                <MudDatePicker Label="Hire Date" Class="mt-3" Required
+                              @bind-Date="UpdateEmployee.HireDate" For="@(() => UpdateEmployee.HireDate)"/>
+                <MudTextField Label="Job Title" Class="mt-3" Required
+                              @bind-Value="UpdateEmployee.JobTitle" For="@(() => UpdateEmployee.JobTitle)" />
+                <MudTextField Label="Salary" Class="mt-3" Required
+                              @bind-Value="UpdateEmployee.Salary" For="@(() => UpdateEmployee.Salary)" />
+                <MudTextField Label="Department" Class="mt-3" Required
+                              @bind-Value="UpdateEmployee.DepartmentName" For="@(() => UpdateEmployee.DepartmentName)" />
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Save Changes</MudButton>
+            </MudCardActions>
+        </MudCard>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+<br />
+<br />
+
+
+@code {
+
+    List<Employee> Employees = new List<Employee>();
+   
+    private string searchString1 = "";
+    
+    private HashSet<Employee> selectedItems = new HashSet<Employee>();
+
+    bool success;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshEmployees();
+
+    }
+
+    private async Task RefreshEmployees()
+    {
+        Employees = await service.GetEmployeeAsync();
+    }
+
+
+    public Employee NewEmployee { get; set; } = new Employee();
+    private async Task AddNewEmployee()
+    {
+        await service.AddEmployeeAsync(NewEmployee);
+        NewEmployee = new Employee();
+        await RefreshEmployees();
+    }
+
+    Employee UpdateEmployee = new Employee();
+    private void SetEmployeeForUpdate(Employee employee)
+    {
+        UpdateEmployee = employee;
+    }
+
+    private async Task UpdateEmployeeData()
+    {
+        await service.UpdateEmployeeAsync(UpdateEmployee);
+        await RefreshEmployees();
+    }
+
+    private async Task DeleteEmployee(Employee employee)
+    {
+        await service.DeleteEmployeeAsync(employee);
+        await RefreshEmployees();
+    }
+
+    private bool FilterFunc1(Employee employee) => FilterFunc(employee, searchString1);
+
+    private bool FilterFunc(Employee employee, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (employee.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (employee.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{employee.Email} {employee.JobTitle}".Contains(searchString))
+            return true;
+        return false;
+    }
+
+    private void OnValidSubmit(EditContext context)
+    {
+        success = true;
+        AddNewEmployee();
+        StateHasChanged();
+    }
+}

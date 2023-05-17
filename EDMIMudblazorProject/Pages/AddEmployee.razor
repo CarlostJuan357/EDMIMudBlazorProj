@@ -1,0 +1,92 @@
+﻿@page "/addEmployee"
+
+@using EDMIMudblazorProject.Data
+
+
+@inject EmployeeServices service
+
+<EditForm Model="@NewEmployee" OnValidSubmit="OnValidSubmit" style="justify-content: center; margin-top:2em;">
+    <DataAnnotationsValidator/>
+    <MudGrid style="justify-content: center!important; margin-top:2em;">
+        <MudItem xs="12" sm="7">
+            <MudCard>
+            <MudCardContent>
+                <MudTextField Label="First name" Required
+                              @bind-Value="NewEmployee.FirstName" For="@(() => NewEmployee.FirstName)"/>
+                <MudTextField Label="Last name" Required
+                              @bind-Value="NewEmployee.LastName" For="@(() => NewEmployee.LastName)" />
+                <MudTextField Label="Email" Class="mt-3" Required
+                              @bind-Value="NewEmployee.Email" For="@(() => NewEmployee.Email)" />
+                <MudTextField Label="Phone Number" Class="mt-3" Required 
+                              @bind-Value="NewEmployee.PhoneNumber" For="@(() => NewEmployee.PhoneNumber)" />
+                <MudDatePicker Label="Hire Date" Class="mt-3" Required
+                              @bind-Date="NewEmployee.HireDate" For="@(() => NewEmployee.HireDate)"/>
+                <MudTextField Label="Job Title" Class="mt-3" Required
+                              @bind-Value="NewEmployee.JobTitle" For="@(() => NewEmployee.JobTitle)" />
+                <MudTextField Label="Salary" Class="mt-3" Required
+                              @bind-Value="NewEmployee.Salary" For="@(() => NewEmployee.Salary)" />
+                <MudTextField Label="Department" Class="mt-3" Required
+                              @bind-Value="NewEmployee.DepartmentName" For="@(() => NewEmployee.DepartmentName)" />
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
+            </MudCardActions>
+        </MudCard>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+
+@code {
+
+    List<Employee> Employees = new List<Employee>();
+
+    private string _searchString;
+    bool success;
+    private bool _readOnly;
+    private bool _isCellEditMode;
+    private List<string> _events = new();
+    private bool _editTriggerRowClick;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshEmployees();
+    }
+
+    private async Task RefreshEmployees()
+    {
+        Employees = await service.GetEmployeeAsync();
+    }
+
+    public Employee NewEmployee { get; set; } = new Employee();
+    private async Task AddNewEmployee()
+    {
+        await service.AddEmployeeAsync(NewEmployee);
+        NewEmployee = new Employee();
+        await RefreshEmployees();
+    }
+
+    private Func<Employee, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
+
+        if (x.FirstName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.LastName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if ($"{x.Email}".Contains(_searchString))
+            return true;
+
+        return false;
+    };
+
+    private void OnValidSubmit(EditContext context)
+    {
+        success = true;
+        AddNewEmployee();
+        StateHasChanged();
+    }
+}

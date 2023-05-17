@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "Hash": "nTtr4uSXfPfljLIpyByJUSJiXxKGRW7mV+dA6bMrO1U=",
+  "Source": "EDMIMudblazorProject",
+  "BasePath": "_content/EDMIMudblazorProject",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "EDMIMudblazorProject\\wwwroot",
+      "Source": "EDMIMudblazorProject",
+      "ContentRoot": "E:\\Program\\EDMIProject\\EDMIMudblazorProject\\EDMIMudblazorProject\\wwwroot\\",
+      "BasePath": "_content/EDMIMudblazorProject",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\MSi\\.nuget\\packages\\mudblazor\\6.2.3\\staticwebassets\\MudBlazor.min.css",
+      "SourceId": "MudBlazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\MSi\\.nuget\\packages\\mudblazor\\6.2.3\\staticwebassets\\",
+      "BasePath": "_content/MudBlazor",
+      "RelativePath": "MudBlazor.min.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\MSi\\.nuget\\packages\\mudblazor\\6.2.3\\staticwebassets\\MudBlazor.min.css"
+    },
+    {
+      "Identity": "C:\\Users\\MSi\\.nuget\\packages\\mudblazor\\6.2.3\\staticwebassets\\MudBlazor.min.js",
+      "SourceId": "MudBlazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\MSi\\.nuget\\packages\\mudblazor\\6.2.3\\staticwebassets\\",
+      "BasePath": "_content/MudBlazor",
+      "RelativePath": "MudBlazor.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\MSi\\.nuget\\packages\\mudblazor\\6.2.3\\staticwebassets\\MudBlazor.min.js"
+    },
+    {
+      "Identity": "E:\\Program\\EDMIProject\\EDMIMudblazorProject\\EDMIMudblazorProject\\wwwroot\\favicon.ico",
+      "SourceId": "EDMIMudblazorProject",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\Program\\EDMIProject\\EDMIMudblazorProject\\EDMIMudblazorProject\\wwwroot\\",
+      "BasePath": "_content/EDMIMudblazorProject",
+      "RelativePath": "favicon.ico",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\favicon.ico"
+    }
+  ]
+}
