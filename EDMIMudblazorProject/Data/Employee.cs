@@ -19,7 +19,7 @@ namespace EDMIMudblazorProject.Data
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Phone number is Required")]
-        [RegularExpression(@"^[0-9]{1,11}$", ErrorMessage = "Phone number must be 11 digits and no special characters")]
+        [RegularExpression(@"^[0-9]{11}$", ErrorMessage = "Phone number must be 11 digits and no special characters")]
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Hire date is Required")]

@@ -46,7 +46,7 @@
 
 <br />
 
-<EditForm Model="@UpdateEmployee" OnValidSubmit="OnValidSubmit" style="justify-content: center;">
+<EditForm Model="@UpdateEmployee" style="justify-content: center;">
     <DataAnnotationsValidator/>
     <MudGrid style="justify-content: center!important;">
         <MudItem xs="12" sm="7" lg="5">
@@ -70,7 +70,7 @@
                               @bind-Value="UpdateEmployee.DepartmentName" For="@(() => UpdateEmployee.DepartmentName)" />
             </MudCardContent>
             <MudCardActions>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Save Changes</MudButton>
+                <MudButton ButtonType="ButtonType.Submit" @onclick="UpdateEmployeeData" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Save Changes</MudButton>
             </MudCardActions>
         </MudCard>
         </MudItem>
@@ -83,10 +83,12 @@
 
 @code {
 
+    @inject NavigationManager NavigationManager;
+
     List<Employee> Employees = new List<Employee>();
-   
+
     private string searchString1 = "";
-    
+
     private HashSet<Employee> selectedItems = new HashSet<Employee>();
 
     bool success;
@@ -115,12 +117,15 @@
     private void SetEmployeeForUpdate(Employee employee)
     {
         UpdateEmployee = employee;
+        
     }
 
     private async Task UpdateEmployeeData()
     {
         await service.UpdateEmployeeAsync(UpdateEmployee);
         await RefreshEmployees();
+        NavigationManager.NavigateTo("employeeTable", true);
+        
     }
 
     private async Task DeleteEmployee(Employee employee)
@@ -144,10 +149,11 @@
         return false;
     }
 
-    private void OnValidSubmit(EditContext context)
+    @* private void OnValidSubmit(EditContext context)
     {
         success = true;
-        AddNewEmployee();
+        UpdateEmployeeData();
         StateHasChanged();
-    }
+
+    } *@
 }
